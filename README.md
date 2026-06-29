@@ -53,13 +53,7 @@ Watch a full end-to-end interactive demo of the application including Citizen Re
 
 ### 🌍 Real-Time Translation (Hindi / Kannada / Tamil)
 Citizens can translate descriptions and timeline updates to their native language with one-click, using context-aware Gemini translations.
-![Translation Demo](./assets/translation_demo.png)
-
----
-
-### 🏢 Admin Command Dashboard & AI Metrics
-The operational view provides admins with weekly SLA trends, classification charts, and live predictive operations insights.
-![Admin Dashboard](./assets/admin_dashboard.png)
+![Translation Demo]
 
 ---
 
