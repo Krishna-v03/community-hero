@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Community Hero — Project Documentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+      color: #111111;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+      border-bottom: 2px solid #34495e;
+      padding-bottom: 10px;
+      margin-top: 40px;
+    }
+    h2 {
+      color: #2e4053;
+      border-bottom: 1px solid #bdc3c7;
+      padding-bottom: 5px;
+      margin-top: 30px;
+    }
+    h3 {
+      color: #34495e;
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #bdc3c7;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f4f4;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f9eef2; /* soft tint */
+      background-color: #f8f9f9;
+    }
+    pre {
+      background-color: #f4f6f7;
+      border: 1px solid #d5dbdb;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: 'Courier New', Courier, monospace;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .highlight {
+      background-color: #fcf3cf;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    .callout {
+      background-color: #ebf5fb;
+      border-left: 5px solid #3498db;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 4px 4px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="text-align: center; margin-bottom: 50px;">
+    <h1 style="border-bottom: none; color: #2c3e50; font-size: 32px; margin-bottom: 5px;">🦸‍♂️ COMMUNITY HERO</h1>
+    <h3 style="color: #7f8c8d; font-weight: normal; margin-top: 0;">Hyperlocal Problem Solver powered by Google Gemini & Google Cloud</h3>
+    <p style="font-style: italic;">Official Hackathon Submission Project Documentation</p>
+  </div>
+
+  <!-- ══════════════════════════ SECTION 1 ══════════════════════════ -->
+  <h1>1. Executive Summary & Impact Metrics</h1>
+  
+  <p><strong>Community Hero</strong> is an autonomous, trust-weighted civic platform designed to connect citizens, field officers, and city administrators to rapidly resolve public infrastructure failures (potholes, garbage pile-ups, broken streetlights, water leaks). By placing <strong>Google Gemini AI</strong> at the core of report triaging, queue management, and service operations, we transform random citizen complaints into structured, actionable municipal tickets.</p>
+
+  <div class="callout">
+    <strong>Ultimate Value Proposition:</strong><br>
+    For municipal bodies overwhelmed by disorganized public complaints, Community Hero is a zero-friction, self-verifying triage system that slashes issue verification times, eliminates duplicate tasks automatically using GPS boundaries, and guides field workers through automated scheduling—delivering real-time transparency to citizens.
+  </div>
+
+  <h3>Key Impact Metrics (Forecasted)</h3>
+  <ul>
+    <li><strong>95% Reduction in Triage Delay:</strong> AI classifies and assigns uploaded complaints in under 3 seconds, replacing manual queues that took up to 5 business days.</li>
+    <li><strong>100% Duplicate Prevention:</strong> Geolocation checkups prevent duplicate entries of the same issue within 60 meters, routing subsequent reporters to confirm the existing ticket.</li>
+    <li><strong>75% Shorter On-site Check-in Times:</strong> Mobile navigation and geo-boundary validation ensure field officers are routed directly to coordinates, logging on-site attendance instantly.</li>
+  </ul>
+
+  <!-- ══════════════════════════ SECTION 2 ══════════════════════════ -->
+  <h1>2. Problem Statement Selected</h1>
+  
+  <p>Urban infrastructure decay (potholes, broken lights, leakages) degrades standard of living and presents hazard risks. Current municipal complaint frameworks fail due to structural backlogs.</p>
+
+  <h3>A. Root Cause Analysis</h3>
+  <p>Traditional municipal structures rely on manual sorting. Reports come through scattered channels (emails, calls, social media mentions) and lack structured metadata (such as verified GPS coordinates, severity metrics, and category tags). This creates backlogs where critical issues are buried under non-critical complaints or spam.</p>
+
+  <h3>B. Target Audience / User Personas</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">User Role</th>
+        <th style="width: 35%;">Pain Points</th>
+        <th style="width: 40%;">Goals in Platform</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Citizen Clara</strong><br>(Active Resident)</td>
+        <td>Frustrated by lack of tracking. Reports feel like they disappear into a black hole with no progress updates.</td>
+        <td>Easy one-tap photo reporting, updates on ticket status, and verified contributions to community well-being.</td>
+      </tr>
+      <tr>
+        <td><strong>Admin Alex</strong><br>(Operations Manager)</td>
+        <td>Receives hundreds of identical tickets for high-profile potholes. Spends hours manually delegating tasks.</td>
+        <td>Clean deduplicated ticket queue, auto-triage of severity, and AI officer load balancing.</td>
+      </tr>
+      <tr>
+        <td><strong>Field Officer Oliver</strong><br>(On-Site Crew)</td>
+        <td>Disorganized work orders, unclear directions to faults, and heavy paperwork to close tickets.</td>
+        <td>Clear assignment checklist, GPS-based location pins, and mobile one-click resolution reports.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>C. Why Existing Solutions Fail</h3>
+  <ul>
+    <li><strong>No Geofenced Deduplication:</strong> Existing citizen apps allow infinite reports for the same pothole, creating massive noise in databases.</li>
+    <li><strong>No Trust Weighting:</strong> All complaints are treated equally. A malicious report has the same weight as a report verified by five local residents.</li>
+    <li><strong>Manual Verification Bottleneck:</strong> Cities must deploy field inspectors just to verify if a complaint is real, wasting operational budget.</li>
+  </ul>
+
+  <!-- ══════════════════════════ SECTION 3 ══════════════════════════ -->
+  <h1>3. Solution Overview & Architecture</h1>
+
+  <p>Community Hero resolves these issues by building a unified database with role-based dashboard screens and an intelligent AI layer. The backend automates validation using Google Gemini vision models and spatial databases.</p>
+
+  <h3>System Architecture Flow Chart</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Step 1: Client Side</th>
+        <th style="width: 35%;">Step 2: GitHub CI/CD Pipeline</th>
+        <th style="width: 35%;">Step 3: Google Cloud Runtime</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <ul>
+            <li><strong>Citizen App:</strong> HTML5/JS client captures photo & coordinates.</li>
+            <li><strong>Leaflet Map UI:</strong> Dynamic marker placement.</li>
+            <li><strong>Mock/Firebase Sync:</strong> Pushes JSON payload.</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><strong>Code Push:</strong> Triggers build on Git commits to main branch.</li>
+            <li><strong>Cloud Build Trigger:</strong> Automates Docker container creation.</li>
+            <li><strong>Artifact Registry:</strong> Safely stores and versions image builds.</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><strong>Google Cloud Run:</strong> Scales Node.js container based on incoming traffic.</li>
+            <li><strong>Gemini 2.5 Flash API:</strong> Triages report images, filters spam, and details reasoning.</li>
+            <li><strong>Firestore Database:</strong> Real-time bi-directional sync of ticket status.</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════════════ SECTION 4 ══════════════════════════ -->
+  <h1>4. Key Features & User Value Mapping</h1>
+
+  <p>Every feature within the Community Hero system is engineered to solve a direct real-world problem for our users:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Platform Feature</th>
+        <th style="width: 30%;">Technical Implementation</th>
+        <th style="width: 40%;">Delivered User Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>AI Visual Triage</strong></td>
+        <td>Google Gemini 2.5 Flash vision model parses images on `/api/classify` to extract category, severity, and description.</td>
+        <td><strong>Eliminates Manual Ingestion:</strong> Ensures incorrect category filings or random spam pictures are auto-rejected before reaching staff.</td>
+      </tr>
+      <tr>
+        <td><strong>Proximity-Weighted Verification</strong></td>
+        <td>Only allows users within 500m of coordinates to verify. Upvotes are scaled by user trust metrics. Promotes status automatically once threshold is met.</td>
+        <td><strong>Automated Inspections:</strong> Replaces expensive manual site inspections by leveraging crowd-sourced, geofenced peer verification.</td>
+      </tr>
+      <tr>
+        <td><strong>Anti-Duplicate Geofencing</strong></td>
+        <td>Calculates spatial proximity using coordinates. Merges reports within a 60m radius of an existing ticket.</td>
+        <td><strong>De-clutters Database:</strong> Stops multiple citizens from creating separate duplicate tickets for the same physical issue.</td>
+      </tr>
+      <tr>
+        <td><strong>Civic Gamification & Streaks</strong></td>
+        <td>Pushes custom badge achievements and XP to user profiles on local verification triggers and login streaks.</td>
+        <td><strong>Citizen Engagement:</strong> Motivates community members to verify reports and stay active in local cleanup initiatives.</td>
+      </tr>
+      <tr>
+        <td><strong>AI Officer Recommendation</strong></td>
+        <td>Generates assignment suggestions on `/api/suggest-assignment` based on officer proximity and current queue count.</td>
+        <td><strong>Reduces Admin Burden:</strong> Replaces manual delegation with smart routing, reducing time-to-assignment from days to seconds.</td>
+      </tr>
+      <tr>
+        <td><strong>Officer GPS Check-In</strong></td>
+        <td>Forces a client-side geolocation validation. Checks if the field officer is within 200m before unlocking status edits.</td>
+        <td><strong>Accountability & Truth:</strong> Guarantees officers are physically on-site before marking issues as resolved or updating timelines.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════════════ SECTION 5 ══════════════════════════ -->
+  <h1>5. Technologies Used & Integration Stack</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Stack Layer</th>
+        <th style="width: 35%;">Technologies Chosen</th>
+        <th style="width: 40%;">Role in Platform</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Frontend</strong></td>
+        <td>HTML5, Vanilla CSS3 (Custom Grid/Flexbox), ES6 Vanilla JS</td>
+        <td>Constructs the user viewport interface, login screens, view transitions, and forms. No heavy framework dependency for lightweight loading.</td>
+      </tr>
+      <tr>
+        <td><strong>Mapping & Maps</strong></td>
+        <td>Leaflet.js API (Voyager / CartoDB Maps)</td>
+        <td>Interactive mapping showing issue pins, coordinates extraction, and geofenced range verification.</td>
+      </tr>
+      <tr>
+        <td><strong>Charts</strong></td>
+        <td>Chart.js API</td>
+        <td>Renders line and pie charts dynamically on the Admin dashboard for SLA tracking and category analysis.</td>
+      </tr>
+      <tr>
+        <td><strong>Backend</strong></td>
+        <td>Node.js & Express.js</td>
+        <td>Serves static files, routes API endpoints, handles JSON payload storage, and manages environment variables via dotenv.</td>
+      </tr>
+      <tr>
+        <td><strong>Database</strong></td>
+        <td>Firebase Firestore (Client-side & local fallback)</td>
+        <td>Stores active lists of issues and users. Synchronizes status updates instantly across citizen and officer panels in real-time.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════════════ SECTION 6 ══════════════════════════ -->
+  <h1>6. Google Technologies Utilized & Cloud Infrastructure</h1>
+
+  <h3>A. Google Gemini AI API</h3>
+  <p>We integrated the official <code>@google/genai</code> SDK, utilizing the <code>gemini-2.5-flash</code> model. This model offers the optimal balance of image comprehension, JSON schema formatting compliance, and rapid response speed. It powers the following workflows:</p>
+  <ul>
+    <li><strong>Image Classification:</strong> Extracts clean category arrays and flags spam.</li>
+    <li><strong>Smart Assignment Recommender:</strong> Analyzes proximity, backlog, and load.</li>
+    <li><strong>SLA Escalation Generator:</strong> Writes professional operational memos summarizing overdue issues.</li>
+  </ul>
+
+  <h3>B. Google Cloud Run</h3>
+  <p>Our app is hosted on <strong>Google Cloud Run</strong> (europe-west1 region). By deploying a lightweight Node container, the app scales automatically with traffic peaks (e.g., in a storm with many potholes reported) and scales to 0 instances when idle, incurring zero resource costs during downtime.</p>
+
+  <h3>C. Google Cloud Build & Artifact Registry</h3>
+  <p>We established a secure, fully automated CI/CD pipeline. Every commit pushed to the <code>main</code> branch triggers Google Cloud Build, which builds the Docker image using the repository's <code>Dockerfile</code> and deploys it to Cloud Run. The configuration utilizes the following <code>cloudbuild.yaml</code> style steps:</p>
+
+  <pre>
+# Example automated build steps triggered on Git push
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/app/community-hero:$COMMIT_SHA', '.']
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'europe-west1-docker.pkg.dev/$PROJECT_ID/app/community-hero:$COMMIT_SHA']
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'community-hero'
+      - '--image'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/app/community-hero:$COMMIT_SHA'
+      - '--region'
+      - 'europe-west1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+  </pre>
+
+  <!-- ══════════════════════════ SECTION 7 ══════════════════════════ -->
+  <h1>7. Future Roadmap & Scalability Plan</h1>
+
+  <p>To scale Community Hero from a hackathon prototype into a city-wide operational solution, we outline a three-phase expansion:</p>
+
+  <h3>Phase 1: Field Trials & Municipal Pilots (1–3 Months)</h3>
+  <ul>
+    <li>Run a localized pilot with 100 volunteer citizens and 5 city field officers.</li>
+    <li>Calibrate the Proximity Trust-Weighting model based on GPS precision variance in dense high-rise areas.</li>
+  </ul>
+
+  <h3>Phase 2: Advanced AI Predicative Dispatch (3–6 Months)</h3>
+  <ul>
+    <li>Integrate historical weather forecasts and infrastructure age datasets.</li>
+    <li>Use Gemini models to proactively prompt municipal crews to inspect older streetlights before a major rainstorm occurs.</li>
+  </ul>
+
+  <h3>Phase 3: Multi-City Federated Deployment (6+ Months)</h3>
+  <ul>
+    <li>Abstract the database structure to support separate municipal logins (multi-tenant architecture).</li>
+    <li>Optimize the PWA to allow citizens to seamlessly switch municipal jurisdictions when traveling across borders.</li>
+  </ul>
+
+</body>
+</html>
