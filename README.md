@@ -8,7 +8,7 @@
 [![Google Cloud](https://img.shields.io/badge/GCP-Cloud%20Run%20%7C%20App%20Engine-orange?style=for-the-badge&logo=google-cloud)](https://cloud.google.com/)
 [![Firebase](https://img.shields.io/badge/Database-Firebase-yellow?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 
-🔗 **Live Demo URL:** [https://community-hero-demo-18268-uc.a.run.app](https://community-hero-demo-18268-uc.a.run.app)
+🔗 **Live Demo URL:** [https://community-hero-1026415427793.europe-west1.run.app](https://community-hero-1026415427793.europe-west1.run.app)
 
 ---
 
