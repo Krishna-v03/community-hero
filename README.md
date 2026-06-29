@@ -59,7 +59,7 @@ Citizens can translate descriptions and timeline updates to their native languag
 
 ### 📋 Exportable PDF Operations Reports
 Admins can generate and print clean, professional PDF reports of the operational queue for municipal records and staff meetings.
-![PDF Report Demo](./assets/pdf_report_demo.png)
+![PDF Report Demo](./assets/Screenshot 2026-06-29 180806.png)
 
 ---
 
