@@ -51,14 +51,6 @@ Watch a full end-to-end interactive demo of the application including Citizen Re
 
 ---
 
-## 🎨 Visual Showcase (Actual Screenshots)
-
-### 📱 Citizen Hub & Geolocation Mapping
-The mobile-first citizen dashboard maps active local issues and coordinates community upvoting based on active user GPS boundaries.
-![Citizen Map Dashboard](./assets/citizen_map.png)
-
----
-
 ### 🌍 Real-Time Translation (Hindi / Kannada / Tamil)
 Citizens can translate descriptions and timeline updates to their native language with one-click, using context-aware Gemini translations.
 ![Translation Demo](./assets/translation_demo.png)
