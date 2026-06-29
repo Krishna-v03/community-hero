@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: community-hero
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: GEMINI_API_KEY
+        sync: false # Render will prompt you to enter this value securely
