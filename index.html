@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Hero — Hyperlocal Problem Solver</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#966b9d">
+  <!-- CDNs for mapping, charts, icons, and fonts -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════ LOGIN SCREEN ═══════════════════════════════════════ -->
+  <div id="login-screen" class="login-screen">
+
+    <!-- Animated background particles -->
+    <div class="login-bg-grid"></div>
+
+    <div class="login-card">
+
+      <!-- Logo & branding -->
+      <div class="login-brand">
+        <div class="login-logo">
+          <i class="fa-solid fa-hands-holding-child"></i>
+        </div>
+        <h1 class="login-title">Community Hero</h1>
+        <p class="login-subtitle">Hyperlocal Problem Solver · AI-Powered Civic Platform</p>
+      </div>
+
+      <!-- Login form -->
+      <form id="login-form" onsubmit="handleLogin(event)" autocomplete="off" novalidate>
+
+        <div class="login-field-group">
+          <label class="login-label" for="login-email">
+            <i class="fa-solid fa-envelope"></i> Email Address
+          </label>
+          <input
+            type="email"
+            id="login-email"
+            class="login-input"
+            placeholder="you@example.com"
+            required
+            autofocus
+          >
+        </div>
+
+        <div class="login-field-group">
+          <label class="login-label" for="login-password">
+            <i class="fa-solid fa-lock"></i> Password
+          </label>
+          <div class="login-password-wrapper">
+            <input
+              type="password"
+              id="login-password"
+              class="login-input"
+              placeholder="Enter your password"
+              required
+            >
+            <button type="button" class="btn-toggle-pw" onclick="togglePasswordVisibility()" title="Show/hide password">
+              <i class="fa-regular fa-eye" id="pw-eye-icon"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error message -->
+        <div class="login-error" id="login-error" style="display:none;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="login-error-msg">Invalid email or password.</span>
+        </div>
+
+        <button type="submit" class="btn-login" id="btn-login-submit">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          Sign In
+        </button>
+      </form>
+
+      <!-- Quick-fill credential hints -->
+      <div class="login-hints">
+        <p class="login-hints-label">Demo accounts — click to auto-fill:</p>
+        <div class="login-hint-chips">
+          <button type="button" class="hint-chip citizen" onclick="fillCredentials('krishna@civic.com','citizen123')">
+            <i class="fa-solid fa-user"></i> Citizen
+          </button>
+          <button type="button" class="hint-chip officer" onclick="fillCredentials('ramesh@civic.com','officer123')">
+            <i class="fa-solid fa-hard-hat"></i> Field Officer
+          </button>
+          <button type="button" class="hint-chip admin" onclick="fillCredentials('sarah@civic.com','admin123')">
+            <i class="fa-solid fa-shield-halved"></i> Admin
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- ═══════════════════════════════════════════════════════════════════════════════════════════ -->
+
+  <div class="app-container" id="app-container" style="display:none;">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div>
+        <div class="brand-section">
+          <div class="brand-logo">
+            <i class="fa-solid fa-hands-holding-child"></i>
+          </div>
+          <span class="brand-title">Community Hero</span>
+        </div>
+        
+        <ul class="nav-menu">
+          <li class="nav-item active" id="nav-citizen">
+            <button onclick="switchView('citizen')">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <span>Citizen Hub</span>
+            </button>
+          </li>
+          <li class="nav-item" id="nav-authority" style="display:none;">
+            <button onclick="switchView('authority')">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Authority Console</span>
+            </button>
+          </li>
+          <li class="nav-item" id="nav-public">
+            <button onclick="switchView('public')">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Public Impact</span>
+            </button>
+          </li>
+          <li class="nav-item" id="nav-officer" style="display:none;">
+            <button onclick="switchView('officer')">
+              <i class="fa-solid fa-hard-hat"></i>
+              <span>My Assignments</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- User Widget -->
+      <div class="sidebar-user-widget">
+        <div class="user-profile-summary">
+          <div class="avatar-circle" id="user-avatar">KV</div>
+          <div class="user-details-mini">
+            <span class="user-name-mini" id="user-name-display">Krishna Vishwakarma</span>
+            <span class="user-role-badge" id="user-role-display">Citizen</span>
+          </div>
+        </div>
+        <div class="user-stats-mini">
+          <div class="stat-item-mini">
+            <span>Points</span>
+            <div id="user-points-display">150 XP</div>
+          </div>
+          <div class="stat-item-mini">
+            <span>Trust Score</span>
+            <div id="user-trust-display">92%</div>
+          </div>
+        </div>
+
+        <!-- Logout button -->
+        <button class="btn-logout" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sign Out</span>
+        </button>
+
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header bar -->
+      <header class="top-header">
+        <button id="btn-back-navigation" onclick="navigateBack()" class="btn-secondary" style="display:none; align-items:center; justify-content:center; width:38px; height:38px; border-radius:10px; padding:0; margin-right:12px; cursor:pointer; background:rgba(255,255,255,0.7); border:1px solid var(--border-color); color:var(--text-color); flex-shrink:0;">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="header-search" id="header-search-wrapper">
+          <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+          <input type="text" id="search-input" placeholder="Search reports, locations, issues..." oninput="applyFilters()">
+        </div>
+        
+        <div class="header-actions">
+          <!-- Notification Bell -->
+          <div class="notif-bell-wrapper" id="notif-bell-wrapper">
+            <button class="notif-bell-btn" id="notif-bell-btn" onclick="toggleNotifDropdown()" title="Notifications">
+              <i class="fa-solid fa-bell"></i>
+              <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+            </button>
+            <div class="notif-dropdown" id="notif-dropdown" style="display:none;">
+              <div class="notif-dropdown-header">
+                <span><i class="fa-solid fa-bell"></i> Notifications</span>
+                <button onclick="clearNotifications()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:11px;">Clear all</button>
+              </div>
+              <div class="notif-list" id="notif-list">
+                <div class="notif-empty"><i class="fa-regular fa-bell-slash"></i><br>No notifications yet</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-report-header" id="btn-report-header" onclick="openReportModal()">
+            <i class="fa-solid fa-circle-plus"></i>
+            <span>Report Issue</span>
+          </button>
+        </div>
+      </header>
+      
+      <!-- View Panel -->
+      <div class="view-panel">
+        
+        <!-- View 1: Citizen Hub (Map + List) -->
+        <div id="view-citizen" class="app-view active">
+          
+          <div class="feed-column">
+            <div class="feed-filters">
+              <div class="filter-row">
+                <select id="filter-category" class="filter-select" onchange="applyFilters()">
+                  <option value="all">All Categories</option>
+                  <option value="pothole">Potholes</option>
+                  <option value="streetlight">Streetlights</option>
+                  <option value="garbage">Garbage / Waste</option>
+                  <option value="water leakage">Water Leakage</option>
+                  <option value="spam">Spam / Unrelated</option>
+                </select>
+                
+                <select id="filter-status" class="filter-select" onchange="applyFilters()">
+                  <option value="all">All Statuses</option>
+                  <option value="Reported">Reported</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="In Progress">In Progress</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="feed-cards-container" id="citizen-feed-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+          
+          <div class="map-column">
+            <div id="map-element"></div>
+          </div>
+          
+        </div>
+        
+        <!-- View 2: Authority Console -->
+        <div id="view-authority" class="app-view">
+          
+          <div class="admin-dashboard" id="admin-analytics-view">
+            <div class="dashboard-stats-row">
+              <div class="stat-card">
+                <div class="stat-card-info">
+                  <h3>Reported Issues</h3>
+                  <div class="stat-value" id="stat-reported">0</div>
+                </div>
+                <div class="stat-card-icon primary">
+                  <i class="fa-solid fa-file-invoice"></i>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-info">
+                  <h3>In Progress</h3>
+                  <div class="stat-value" id="stat-progress">0</div>
+                </div>
+                <div class="stat-card-icon warning">
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-info">
+                  <h3>Resolved Today</h3>
+                  <div class="stat-value" id="stat-resolved">0</div>
+                </div>
+                <div class="stat-card-icon success">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-info">
+                  <h3>Overdue (SLA breach)</h3>
+                  <div class="stat-value" id="stat-overdue">0</div>
+                </div>
+                <div class="stat-card-icon danger">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="charts-row">
+              <div class="chart-card">
+                <h3>SLA Performance (Weekly)</h3>
+                <div class="chart-container">
+                  <canvas id="slaChart"></canvas>
+                </div>
+              </div>
+              
+              <div class="chart-card">
+                <h3>Issue Categories</h3>
+                <div class="chart-container">
+                  <canvas id="categoryChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Predictive Insights Panel -->
+            <div class="predictive-panel" id="predictive-insights-panel">
+              <div class="predictive-header">
+                <i class="fa-solid fa-brain"></i>
+                <span>CivicAI Predictive Insights</span>
+                <span class="predictive-live-badge"><i class="fa-solid fa-circle" style="font-size:7px;"></i> Live</span>
+              </div>
+              <div class="predictive-grid">
+                <div class="predictive-insight-card" id="insight-hotspot">
+                  <div class="insight-icon hotspot"><i class="fa-solid fa-fire"></i></div>
+                  <div class="insight-content">
+                    <div class="insight-label">Hotspot Zone</div>
+                    <div class="insight-value" id="insight-hotspot-val">—</div>
+                    <div class="insight-sub" id="insight-hotspot-sub">Computing...</div>
+                  </div>
+                </div>
+                <div class="predictive-insight-card" id="insight-category">
+                  <div class="insight-icon category"><i class="fa-solid fa-chart-pie"></i></div>
+                  <div class="insight-content">
+                    <div class="insight-label">Top Recurring Issue</div>
+                    <div class="insight-value" id="insight-category-val">—</div>
+                    <div class="insight-sub" id="insight-category-sub">Computing...</div>
+                  </div>
+                </div>
+                <div class="predictive-insight-card" id="insight-avgtime">
+                  <div class="insight-icon avgtime"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                  <div class="insight-content">
+                    <div class="insight-label">Avg Resolution Time</div>
+                    <div class="insight-value" id="insight-avgtime-val">—</div>
+                    <div class="insight-sub" id="insight-avgtime-sub">Based on resolved issues</div>
+                  </div>
+                </div>
+                <div class="predictive-insight-card" id="insight-atrisk">
+                  <div class="insight-icon atrisk"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                  <div class="insight-content">
+                    <div class="insight-label">At-Risk Prediction</div>
+                    <div class="insight-value" id="insight-atrisk-val">—</div>
+                    <div class="insight-sub" id="insight-atrisk-sub">SLA breach likelihood</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="chart-card" style="height: auto;">
+              <h3 style="margin-bottom: 8px;">Active Authority Queue</h3>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-primary" style="width: auto; padding: 8px 16px; font-size: 13px;" onclick="toggleAdminView('queue')">
+                  <i class="fa-solid fa-list-check"></i> Open Queue Management
+                </button>
+                <button class="btn-secondary" style="width: auto; padding: 8px 16px; font-size: 13px; background: rgba(46,125,50,0.1); color: var(--color-success); border-color: rgba(46,125,50,0.2);" onclick="exportIssuesCSV()">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn-secondary" style="width: auto; padding: 8px 16px; font-size: 13px; background: rgba(198,40,40,0.1); color: var(--color-danger); border-color: rgba(198,40,40,0.2);" onclick="exportIssuesPDF()">
+                  <i class="fa-solid fa-file-pdf"></i> Export PDF
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="authority-main-split" id="admin-queue-view" style="display: none; width: 100%;">
+            <div class="queue-column">
+              <div class="queue-header">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap: wrap; gap: 10px;">
+                  <h2>Operational Queue</h2>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <button class="btn-secondary" style="padding:6px 12px; font-size:12px; width:auto; background: rgba(46,125,50,0.1); color: var(--color-success); border-color: rgba(46,125,50,0.2);" onclick="exportIssuesCSV()">
+                      <i class="fa-solid fa-file-csv"></i> Export CSV
+                    </button>
+                    <button class="btn-secondary" style="padding:6px 12px; font-size:12px; width:auto; background: rgba(198,40,40,0.1); color: var(--color-danger); border-color: rgba(198,40,40,0.2);" onclick="exportIssuesPDF()">
+                      <i class="fa-solid fa-file-pdf"></i> Export PDF
+                    </button>
+                    <button class="btn-secondary" style="padding:6px 12px; font-size:12px; width:auto;" onclick="toggleAdminView('dashboard')">
+                      <i class="fa-solid fa-chart-pie"></i> Back to Stats
+                    </button>
+                  </div>
+                </div>
+                <select id="queue-filter-ward" class="filter-select" onchange="applyEnhancedQueueFilters ? applyEnhancedQueueFilters() : applyQueueFilters()">
+                  <option value="all">All Wards</option>
+                  <option value="ward-1">Greenwood Ward</option>
+                  <option value="ward-2">Metro Hub Ward</option>
+                  <option value="ward-3">Lakeview Ward</option>
+                </select>
+                <select id="queue-filter-status" class="filter-select" onchange="applyEnhancedQueueFilters ? applyEnhancedQueueFilters() : applyQueueFilters()">
+                  <option value="all">All Statuses</option>
+                  <option value="overdue">Overdue Only</option>
+                  <option value="unassigned">Unassigned Only</option>
+                </select>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+                  <button class="btn-secondary" style="padding:6px 12px;font-size:12px;width:auto;" onclick="filterQueueOverdue()"><i class="fa-solid fa-clock"></i> Overdue</button>
+                  <button class="btn-secondary" style="padding:6px 12px;font-size:12px;width:auto;" onclick="filterQueueUnassigned()"><i class="fa-solid fa-user-slash"></i> Unassigned</button>
+                  <button class="btn-primary" style="padding:6px 12px;font-size:12px;width:auto;background:var(--color-warning);" onclick="bulkAssignOverdue()"><i class="fa-solid fa-users-gear"></i> Bulk Assign Overdue</button>
+                </div>
+              </div>
+              <div class="feed-cards-container" id="admin-queue-container">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+            
+            <div class="map-column">
+              <div id="admin-map-element"></div>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- View 4: Field Officer — My Assignments Panel -->
+        <div id="view-officer" class="app-view">
+          <div class="authority-main-split" style="width:100%;">
+            <div class="queue-column">
+              <div class="queue-header">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                  <div>
+                    <h2 style="margin-bottom:4px;">My Assignments</h2>
+                    <p style="color:var(--text-muted); font-size:13px;">Issues assigned to you — take field action to resolve them</p>
+                  </div>
+                </div>
+              </div>
+              <div class="feed-cards-container" id="officer-queue-container">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+            <div class="map-column">
+              <div id="officer-map-element"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 3: Public Impact Dashboard + Leaderboard -->
+        <div id="view-public" class="app-view">
+          
+          <div class="public-dashboard-header">
+            <h1>City Impact Dashboard</h1>
+            <p style="color: var(--text-muted); font-size: 15px;">Transparent civic metrics — issues reported, resolved, and community engagement at a glance.</p>
+          </div>
+
+          <!-- City-wide impact stats -->
+          <div class="dashboard-stats-row" style="max-width:1100px;margin:0 auto 28px;width:100%;">
+            <div class="stat-card">
+              <div class="stat-card-info"><h3>Total Reports</h3><div class="stat-value" id="impact-total">0</div></div>
+              <div class="stat-card-icon primary"><i class="fa-solid fa-file-lines"></i></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-info"><h3>Resolved</h3><div class="stat-value" id="impact-resolved">0</div></div>
+              <div class="stat-card-icon success"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-info"><h3>Active Issues</h3><div class="stat-value" id="impact-active">0</div></div>
+              <div class="stat-card-icon warning"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-info"><h3>Avg Resolution</h3><div class="stat-value" id="impact-avg">—</div></div>
+              <div class="stat-card-icon info"><i class="fa-solid fa-clock"></i></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1100px;margin:0 auto 28px;width:100%;">
+            <div class="glass-card" style="padding:20px;">
+              <h3 style="font-size:16px;margin-bottom:12px;"><i class="fa-solid fa-map"></i> Issues by Ward</h3>
+              <div class="chart-container" style="height:200px;"><canvas id="publicWardChart"></canvas></div>
+            </div>
+            <div class="glass-card" style="padding:20px;">
+              <h3 style="font-size:16px;margin-bottom:12px;"><i class="fa-solid fa-brain"></i> CivicAI City Forecast</h3>
+              <div id="ai-trends-panel" style="font-size:13px;line-height:1.7;color:var(--text-muted);">Loading...</div>
+            </div>
+          </div>
+          
+          <div class="public-dashboard-header" style="margin-top:8px;">
+            <h2 style="font-size:22px;">Community Leaderboard</h2>
+            <p style="color:var(--text-muted);font-size:14px;">Civic Hero of the Week: <strong id="hero-of-week" style="color:var(--color-primary);">—</strong> · Your streak: <strong id="impact-streak">0 days</strong></p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 28px; max-width: 1100px; margin: 0 auto; width: 100%;">
+            <!-- Leaderboard Table -->
+            <div class="glass-card" style="padding: 24px;">
+              <h2 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Active Citizens Ranking
+              </h2>
+              <table class="leaderboard-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Citizen</th>
+                    <th>Trust Score</th>
+                    <th>Total Contribution</th>
+                    <th>Badges</th>
+                  </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Gamification Profile / Badge Cabinet -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div class="glass-card" style="padding: 20px;">
+                <h3 style="font-size: 16px; margin-bottom: 16px;">My Level Progress</h3>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Level 3 — Ward Warden</span>
+                  <span style="color: var(--color-primary); font-weight: bold;" id="profile-xp-text">150 / 300 XP</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: rgba(150, 107, 157, 0.12); border-radius: 4px; overflow: hidden; margin-bottom: 12px;">
+                  <div style="width: 50%; height: 100%; background: linear-gradient(to right, var(--color-primary), var(--color-info)); border-radius: 4px;" id="profile-xp-bar"></div>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted);">Earn 150 more XP to unlock Level 4 and the "Green Guardian" tag!</p>
+              </div>
+              
+              <div class="glass-card" style="padding: 20px;">
+                <h3 style="font-size: 16px; margin-bottom: 12px;">My Badges</h3>
+                <div class="badges-container" id="profile-badges-container">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Drawer (Slide-out Panel) -->
+  <div class="detail-drawer" id="issue-detail-drawer">
+    <div class="drawer-header">
+      <span class="card-badge" id="drawer-badge">Reported</span>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button class="btn-share-issue" id="btn-share-issue" onclick="shareActiveIssue()" title="Share Issue" style="background:rgba(255,255,255,0.45); border:1px solid var(--border-color); border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-muted); transition: all 0.2s;">
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+        <button class="btn-close-modal" onclick="closeDetailDrawer()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    
+    <div class="drawer-body">
+      <img class="drawer-image" id="drawer-img" src="" alt="Issue Image">
+      <video class="drawer-image" id="drawer-vid" controls style="display:none; background:#000;"></video>
+      <h2 id="drawer-title" style="text-transform: capitalize; margin-bottom: 8px; font-size: 20px; font-weight:700;">Streetlight Issue</h2>
+      
+      <div class="card-meta" style="margin-bottom: 8px;" id="drawer-meta">
+        <!-- Meta items -->
+      </div>
+      <button type="button" id="btn-translate-desc" class="btn-secondary" style="padding:4px 10px;font-size:11px;width:auto;margin-bottom:12px;">
+        <i class="fa-solid fa-language"></i> Translate to Hindi
+      </button>
+      
+      <p id="drawer-description" style="font-size: 14px; line-height: 1.6; color: var(--text-muted); margin-bottom: 24px;">
+        No description available.
+      </p>
+
+      <!-- Proximity duplicate merger widget -->
+      <div id="drawer-duplicate-widget" style="display:none; background:rgba(198, 40, 40, 0.07); border:1px dashed var(--color-danger); border-radius:10px; padding:12px; margin-bottom:20px;">
+        <h4 style="font-size:13px; color: var(--color-danger); display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-clone"></i> Duplicate Candidate Detected
+        </h4>
+        <p style="font-size:12px; color: var(--color-danger); opacity: 0.8; margin:6px 0;">This report is within 50m of another active ticket. Would you like to merge it?</p>
+        <button class="btn-primary" style="padding:6px 12px; font-size:12px; background:var(--color-danger);" onclick="mergeDuplicateTicket()">
+          Merge & Link Reports
+        </button>
+      </div>
+
+      <!-- Citizen Verification Widget -->
+      <div class="verification-widget" id="citizen-verification-box">
+        <div class="verification-heading">
+          <span>Community Verification</span>
+          <span id="verification-count" style="color:var(--text-muted); font-size:12px;">0 Confirmations</span>
+        </div>
+        <div style="margin:10px 0;">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px;">
+            <span>Verification Progress</span>
+            <span id="verify-progress-label">0 / 2 weighted confirmations</span>
+          </div>
+          <div style="height:6px;background:rgba(150,107,157,0.12);border-radius:3px;overflow:hidden;">
+            <div id="verify-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--color-primary),var(--color-success));transition:width 0.4s;border-radius:3px;"></div>
+          </div>
+          <p style="font-size:10px;color:var(--text-muted);margin-top:4px;">Must be within 500m to verify · votes weighted by trust score</p>
+        </div>
+        <div class="vote-buttons">
+          <button class="btn-vote vote-confirm" id="btn-vote-confirm" onclick="submitVote('confirm')">
+            <i class="fa-regular fa-circle-check"></i> Confirm Issue
+          </button>
+          <button class="btn-vote vote-flag" id="btn-vote-flag" onclick="submitVote('flag')">
+            <i class="fa-regular fa-circle-xmark"></i> Flag Fake
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Operations Panel -->
+      <div class="verification-widget" id="admin-operations-box" style="display:none;">
+        <h4 style="font-size:14px; font-weight:700; margin-bottom:12px; color: var(--color-primary);">
+          <i class="fa-solid fa-toolbox"></i> Officer Assignments
+        </h4>
+        <div class="form-group" id="assign-officer-group">
+          <label class="form-label" style="font-size:12px;">Assign Department Officer</label>
+          <select id="assign-officer-select" class="filter-select" onchange="assignOfficer()">
+            <option value="none">Unassigned</option>
+            <option value="user-ramesh">Officer Ramesh (Roads/Traffic)</option>
+            <option value="user-sarah">Admin Sarah (Sanitation)</option>
+          </select>
+        </div>
+        <div id="ai-assignment-panel" style="display:none;margin:10px 0;padding:10px;background:rgba(150,107,157,0.06);border-radius:8px;font-size:12px;"></div>
+        <button type="button" id="btn-officer-checkin" class="btn-secondary" style="display:none;padding:6px 12px;font-size:12px;width:100%;margin-bottom:10px;" onclick="officerCheckIn()">
+          <i class="fa-solid fa-location-crosshairs"></i> GPS Check-In On Site
+        </button>
+        <div id="officer-actions" style="margin-top:12px;">
+          <!-- Rendered contextually -->
+        </div>
+      </div>
+      
+      <!-- Ticket lifecycle timeline tracker -->
+      <h3 style="font-size:15px; font-weight:700; margin-top:28px;">Lifecycle Timeline</h3>
+      <div class="timeline-container" id="drawer-timeline-container">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Report Issue Modal -->
+  <div class="modal-overlay" id="report-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Report Local Civic Issue</h2>
+        <button class="btn-close-modal" onclick="closeReportModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <form id="issue-report-form" onsubmit="handleFormSubmit(event)">
+        <!-- Camera Capture -->
+        <div class="form-group">
+          <label class="form-label">Capture Evidence <span id="capture-mode-label">Photo</span></label>
+
+          <!-- Camera idle state -->
+          <div class="camera-idle-state" id="camera-idle">
+            <i class="fa-solid fa-camera" id="camera-idle-icon"></i>
+            <p style="font-weight: 600; margin-bottom: 4px;">Tap to open camera</p>
+            <p style="font-size: 12px; color: var(--text-muted);">Capture a photo or record a video of the issue</p>
+            <button type="button" class="btn-camera-open" onclick="openCamera()" id="btn-open-camera" style="margin-bottom: 14px;">
+              <i class="fa-solid fa-camera"></i> Open Camera
+            </button>
+            <div style="margin-top: 0; border-top: 1px solid var(--border-color); padding-top: 12px; width: 100%;">
+              <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Or simulate camera capture for testing:</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;">
+                <button type="button" class="hint-chip" onclick="simulateCameraCapture('pothole.jpg')" style="padding: 4px 8px; font-size: 11px;">Pothole</button>
+                <button type="button" class="hint-chip" onclick="simulateCameraCapture('streetlight.jpg')" style="padding: 4px 8px; font-size: 11px;">Streetlight</button>
+                <button type="button" class="hint-chip" onclick="simulateCameraCapture('garbage.jpg')" style="padding: 4px 8px; font-size: 11px;">Garbage</button>
+                <button type="button" class="hint-chip" onclick="simulateCameraCapture('water_leak.jpg')" style="padding: 4px 8px; font-size: 11px;">Water Leak</button>
+                <button type="button" class="hint-chip" onclick="simulateCameraCapture('selfie_dog.jpg')" style="padding: 4px 8px; font-size: 11px; border-color: rgba(198, 40, 40, 0.3); background: rgba(198, 40, 40, 0.08); color: var(--color-danger);">Spam/Unrelated</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live camera preview -->
+          <div class="camera-preview-wrapper" id="camera-preview-wrapper" style="display:none;">
+            <video id="camera-video" autoplay playsinline muted></video>
+
+            <!-- Photo / Video mode toggle pill -->
+            <div class="camera-mode-toggle" id="camera-mode-toggle">
+              <button type="button" class="mode-btn active" id="mode-btn-photo" onclick="setCameraMode('photo')">
+                <i class="fa-solid fa-camera"></i> Photo
+              </button>
+              <button type="button" class="mode-btn" id="mode-btn-video" onclick="setCameraMode('video')">
+                <i class="fa-solid fa-video"></i> Video
+              </button>
+            </div>
+
+            <!-- Recording timer (video mode only) -->
+            <div class="recording-timer" id="recording-timer" style="display:none;">
+              <span class="rec-dot"></span>
+              <span id="rec-time">00:00</span>
+            </div>
+
+            <!-- Controls bar -->
+            <div class="camera-controls">
+              <!-- Photo shutter -->
+              <button type="button" class="btn-shutter" id="btn-shutter" onclick="capturePhoto()" title="Take Photo">
+                <span class="shutter-ring"></span>
+              </button>
+              <!-- Video record / stop -->
+              <button type="button" class="btn-record" id="btn-record" onclick="toggleVideoRecording()" title="Record Video" style="display:none;">
+                <span class="record-dot" id="record-dot"></span>
+              </button>
+            </div>
+
+            <button type="button" class="btn-camera-close" onclick="closeCamera()" title="Cancel">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Captured media preview (photo OR video) -->
+          <div class="captured-preview-wrapper" id="captured-preview-wrapper" style="display:none;">
+            <canvas id="capture-canvas" style="display:none;"></canvas>
+            <!-- Photo preview -->
+            <img id="captured-img" src="" alt="Captured" style="display:none;" />
+            <!-- Video preview -->
+            <video id="captured-video" controls style="display:none; width:100%; max-height:240px; border-radius:12px 12px 0 0; background:#000;"></video>
+            <div class="captured-actions">
+              <button type="button" class="btn-retake" onclick="retakePhoto()">
+                <i class="fa-solid fa-rotate-left"></i> Retake
+              </button>
+              <span class="captured-ok-badge" id="captured-ok-badge">
+                <i class="fa-solid fa-circle-check"></i> <span id="captured-media-type">Photo</span> Ready
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <label class="form-label" style="margin-bottom: 0;">Description & Comments</label>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <select id="report-lang-select" class="filter-select" style="padding:4px 8px;font-size:11px;width:auto;">
+                <option value="hi">Hindi</option>
+                <option value="kn">Kannada</option>
+                <option value="ta">Tamil</option>
+                <option value="en">English</option>
+              </select>
+              <button type="button" onclick="translateDescription()" class="btn-secondary" style="padding: 4px 8px; font-size: 11px; width: auto;" title="AI Translate">
+                <i class="fa-solid fa-language"></i> Translate
+              </button>
+              <button type="button" id="btn-voice-input" onclick="startVoiceRecognition()" class="btn-secondary" style="padding: 4px 8px; font-size: 11px; width: auto; display: flex; align-items: center; gap: 4px;" title="Dictate Description">
+                <i class="fa-solid fa-microphone" id="voice-mic-icon"></i> <span id="voice-status-text">Voice</span>
+              </button>
+            </div>
+          </div>
+          <textarea class="form-textarea" id="issue-desc" rows="3" placeholder="Explain the severity, hazards, or context..." required></textarea>
+        </div>
+
+        <!-- Interactive Location Pin -->
+        <div class="form-group">
+          <label class="form-label">Verify Issue Location (Pin Location)</label>
+          <div class="modal-map-wrapper">
+            <div id="modal-map"></div>
+          </div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">GPS pins automatically. Drag map pin to refine location if inaccurate.</p>
+        </div>
+
+        <!-- AI Suggested triage diagnostics -->
+        <div class="ai-triage-panel" id="report-ai-panel">
+          <div class="ai-header">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>CivicAI Triage Diagnostics</span>
+          </div>
+          <div class="ai-detail-row">
+            <span>Suggested Category</span>
+            <span id="ai-category-tag" style="color:var(--color-info);">Analysing...</span>
+          </div>
+          <div class="ai-detail-row">
+            <span>AI Confidence</span>
+            <span id="ai-confidence-tag">0%</span>
+          </div>
+          <!-- Animated confidence bar -->
+          <div class="ai-confidence-bar-track">
+            <div class="ai-confidence-bar-fill" id="ai-confidence-bar"></div>
+          </div>
+          <div class="ai-detail-row">
+            <span>Priority Rating</span>
+            <span id="ai-priority-tag">Normal</span>
+          </div>
+          <div class="ai-detail-row">
+            <span>Estimated SLA</span>
+            <span id="ai-sla-tag" style="color:var(--text-muted);">—</span>
+          </div>
+          <div class="ai-detail-row">
+            <span>Severity Risk</span>
+            <span id="ai-risk-tag"><span class="ai-risk-dot" id="ai-risk-dot"></span> <span id="ai-risk-label">—</span></span>
+          </div>
+          <div id="ai-duplicate-warning" style="display:none; color:var(--color-warning); font-size:12px; margin-top:8px; padding-top:8px; border-top:1px dashed rgba(245,158,11,0.3);">
+            <i class="fa-solid fa-triangle-exclamation"></i> Warning: Proximity warning! A similar issue is reported nearby.
+          </div>
+          <div id="ai-spam-warning" style="display:none; color:var(--color-danger); font-size:12px; margin-top:8px; padding-top:8px; border-top:1px dashed rgba(239, 68, 68, 0.3);">
+            <i class="fa-solid fa-circle-exclamation"></i> Warning: Unrelated image detected. Submitting spam reports will deduct 30 XP and reduce your trust score by 15%.
+          </div>
+          <div id="ai-reasoning-text" style="display:none; font-size:12px; margin-top:10px; padding:10px; background:rgba(150,107,157,0.06); border-radius:8px; line-height:1.5; color:var(--text-main);"></div>
+          <div id="ai-offline-banner" style="display:none; font-size:11px; margin-top:8px; color:var(--color-warning);">
+            <i class="fa-solid fa-wifi-slash"></i> AI offline — using on-device MobileNet. Add GEMINI_API_KEY for full vision AI.
+          </div>
+        </div>
+        <!-- Anonymous Reporting Toggle -->
+        <div class="form-group" style="margin-top: 16px; display: flex; align-items: center; gap: 8px; background: rgba(150,107,157,0.04); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <input type="checkbox" id="report-anonymous-toggle" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--color-primary);">
+          <label for="report-anonymous-toggle" class="form-label" style="margin-bottom: 0; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-dark);">Report Anonymously (Hide my name in public feed)</label>
+        </div>
+        
+        <div style="display: flex; gap: 14px; margin-top: 24px;">
+          <button type="button" class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="btn-submit-report">Submit Issue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- /Report Issue Modal -->
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- CDN scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- TensorFlow.js & MobileNet (Genuinely runs client-side Image Recognition) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+  
+  <!-- Firebase SDK (compat build — works with vanilla JS, no bundler needed) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+  <!-- Local files -->
+  <script src="mockData.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase.js"></script>
+  <script src="app.js"></script>
+  <script src="enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "Community Hero — Hyperlocal Problem Solver",
+  "short_name": "Community Hero",
+  "description": "Report, verify, and track local civic issues with AI-powered triage",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff4ec",
+  "theme_color": "#966b9d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23966b9d' width='100' height='100' rx='20'/><text y='68' x='50' text-anchor='middle' font-size='50' fill='white'>🏘</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
