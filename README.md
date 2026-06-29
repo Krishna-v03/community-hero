@@ -15,96 +15,103 @@
 ## 📖 Table of Contents
 1. [📌 Problem Statement](#-problem-statement)
 2. [💡 The Solution](#-the-solution)
-3. [🎨 Visual Showcase](#-visual-showcase)
-4. [📐 Technical Rationale & Architecture](#-technical-rationale--architecture)
-5. [🚀 Key Features](#-key-features)
+3. [🎬 Live Video Walkthrough](#-live-video-walkthrough)
+4. [🎨 Visual Showcase (Actual Screenshots)](#-visual-showcase-actual-screenshots)
+5. [🚀 Key Features Breakdown](#-key-features-breakdown)
 6. [🛠️ Technology Stack](#️-technology-stack)
 7. [💾 Quick Start & Local Setup](#-quick-start--local-setup)
 8. [☁️ Google Cloud Deployment Guide](#️-google-cloud-deployment-guide)
 9. [🧪 Running Smoke Tests](#-running-smoke-tests)
-10. [👥 Demo Accounts & Roles (with Security Disclaimer)](#-demo-accounts--roles)
-11. [🎬 3-Minute Hackathon Demo Script](#-3-minute-hackathon-demo-script)
-12. [🤖 Gemini API Endpoints Configuration](#-gemini-api-endpoints-configuration)
-13. [🔮 Future Roadmap](#-future-roadmap)
-14. [📄 License](#-license)
+10. [👥 Demo Accounts & Roles](#-demo-accounts--roles)
+11. [🤖 Gemini API Endpoints Configuration](#-gemini-api-endpoints-configuration)
+12. [📄 License](#-license)
 
 ---
 
 ## 📌 Problem Statement
 
-In rapidly developing cities, public infrastructure faults (potholes, water leaks, broken streetlights, refuse pile-ups) severely degrade municipal quality of life. Current report channels are fragmented (social media, manual calls) and suffer from:
-* **Zero transparency & tracking:** Citizen reports go into a black hole with no progress visibility.
-* **Civic spam & duplicate reports:** Multi-reporting of a single high-profile issue clogs the municipal sorting queue.
-* **Overwhelmed administrators:** Assigning tasks manual based on field loads and geography takes days, leading to critical SLA breaches.
+In rapidly developing municipal areas, public infrastructure faults (dangerous potholes, leaking water mains, broken streetlights, refuse pile-ups) degrade local safety and quality of life. Traditional report mechanisms suffer from:
+* **Zero transparency & tracking:** Citizens submit reports into a administrative "black hole" with no visual updates.
+* **Civic spam & duplicate tickets:** Hundreds of users submit individual reports for a single high-profile issue, clogging sorting databases.
+* **Administrative bottleneck:** Operators manually analyze, classify, prioritize, and assign tickets based on field load, taking days.
 
 ---
 
 ## 💡 The Solution
 
-**Community Hero** is a Progressive Web App (PWA) that acts as an intelligent, real-time, hyperlocal bridge connecting **Citizens**, **Admins**, and **Field Officers**. Using the **Google GenAI SDK** powered by **Google Gemini 2.5 Flash**, it triages evidence automatically, suggests assignments, warns on SLA breaches, and gamifies local civic participation.
+**Community Hero** is a Progressive Web App (PWA) that acts as an intelligent, real-time, hyperlocal bridge connecting **Citizens**, **Municipal Administrators**, and **Field Officers**. Powered by **Google Gemini 2.5 Flash** and **Google Cloud Run**, it triages visual evidence automatically, prevents duplicate tickets using geofencing, calculates trust-weighted local verifications, suggests field staff assignments, and generates SLA reports.
 
 ---
 
-## 🎨 Visual Showcase
+## 🎬 Live Video Walkthrough
 
-### 🎬 Live Walkthrough Demo Video
-Watch a full end-to-end walkthrough of the platform including Citizen Reporting, AI Visual Triage, Admin Command Operations, and Field Officer check-ins:
+Watch a full end-to-end interactive demo of the application including Citizen Reporting, AI Visual Triage, Admin Command Operations, and Field Officer check-ins:
+
 ![Community Hero Walkthrough Demo](./assets/hackathon_demo.webp)
 
 ---
 
-### 📱 Citizen Map & Gamification
-The mobile-first PWA dashboard enables citizens to view active reports around them and track their civic contributions.
+## 🎨 Visual Showcase (Actual Screenshots)
+
+### 📱 Citizen Hub & Geolocation Mapping
+The mobile-first citizen dashboard maps active local issues and coordinates community upvoting based on active user GPS boundaries.
 ![Citizen Map Dashboard](./assets/citizen_map.png)
 
 ---
 
-### 🧠 CivicAI Visual Triage
-Gemini Vision automatically analyzes uploaded reports, flags duplicates, categorizes issues, and reasons out safety priorities.
-![CivicAI Visual Triage](./assets/ai_triage.png)
+### 🌍 Real-Time Translation (Hindi / Kannada / Tamil)
+Citizens can translate descriptions and timeline updates to their native language with one-click, using context-aware Gemini translations.
+![Translation Demo](./assets/translation_demo.png)
 
 ---
 
-### 🏢 Admin Command Center & AI Forecast
-The administrative command center lists real-time ward analytics, visual SLA graphs, and Gemini-powered operations recommendations.
-![Admin Command Center](./assets/admin_dashboard.png)
+### 🏢 Admin Command Dashboard & AI Metrics
+The operational view provides admins with weekly SLA trends, classification charts, and live predictive operations insights.
+![Admin Dashboard](./assets/admin_dashboard.png)
 
 ---
 
-## 📐 Technical Rationale & Architecture
-
-Our stack was carefully engineered to balance client-side responsiveness, real-time sync, and intelligent agentic decision-making:
-* **Gemini 2.5 Flash via Google AI Studio:** Provides exceptionally low latency and high accuracy in multimodal image parsing. This replaces custom, heavy computer vision pipelines with one API call that does categorization, severity scoring, and reasoning.
-* **Proximity Trust-Weighting:** Resolves civic duplicates before databases are populated by checking reports within a 500-meter radius, drastically reducing manual verification costs.
-* **Firebase Firestore (Real-Time Sync):** Enables immediate bi-directional updates. A citizen sees status timeline progression instantly as the field officer checks in or resolves the ticket.
-
-### 🖼️ Architecture Flow Diagram
-
-```mermaid
-graph TD
-    A[Citizen reports via Photo/Video] -->|Express Backend| B[Gemini Vision AI Triage]
-    B -->|Classifies & Analyzes| C{Category / Priority / Reasoning}
-    C -->|Spam / Unrelated| D[Auto-Reject Issue]
-    C -->|Valid Infrastructure Issue| E[Proximity Duplicate Check]
-    E -->|Is Duplicate| F[Increment Trust weight]
-    E -->|Is New Issue| G[Active Issue Queue]
-    G -->|Community Proximity Vote| H[Trust-Weighted Auto-Verification]
-    H -->|Admin Panel| I[Gemini Officer Suggestion]
-    I -->|Officer Assign| J[Field Officer Mobile View]
-    J -->|GPS Check-in + Resolve Photo| K[Close Ticket + Grant XP/Badges]
-    G -->|SLA Overdue| L[CivicAI Auto-Escalation Memo]
-```
+### 📋 Exportable PDF Operations Reports
+Admins can generate and print clean, professional PDF reports of the operational queue for municipal records and staff meetings.
+![PDF Report Demo](./assets/pdf_report_demo.png)
 
 ---
 
-## 🚀 Key Features
+## 🚀 Key Features Breakdown
 
-* **🧠 Smart AI Triage (Gemini 2.5 Flash):** Classifies reports instantly into categories, filters out selfies or spam, and details its reasoning.
-* **📍 Trust-Weighted Verification:** Nearby citizens (validated within 500m via GPS) verify issues. Reaching target weight triggers auto-verification.
-* **🎖️ Civic Gamification:** Citizens earn XP, unlock custom badges, maintain streaks, and climb the public leaderboard for civic contributions.
-* **⚡ Real-time Synchronization:** Powered by Firestore (or local fallback) to update officer assignments and citizen status maps in real-time.
-* **🚨 Agentic SLA Escalation:** CivicAI periodically monitors overdue tickets and auto-generates structured escalation memos for administration heads.
-* **🌍 Translation Engine:** Automatically translates reports and status messages to **Hindi (हिन्दी)**, **Kannada (ಕನ್ನಡ)**, and **Tamil (தமிழ்)** using Gemini.
+### 1. 🧠 Multimodal AI Visual Triage (Gemini 2.5 Flash)
+- When a citizen uploads an image of a fault, the backend passes it to the Gemini vision model.
+- The model automatically extracts the **Category** (pothole, streetlight, garbage, water leakage), flags **Spam/Unrelated** images, computes **Severity** (Low, Medium, High, Critical), explains the **Reasoning**, and suggests a concise report title.
+
+### 2. 🎙️ Voice Dictation Dictator (Web Speech API)
+- Citizens who cannot easily type can use the **Voice Input** button on the report form.
+- It uses the browser's native Speech Recognition API to transcribe speech in real-time. If microphone access is blocked, it offers a typing simulation overlay so the feature remains testable.
+
+### 3. 🌍 Multi-lingual Translation API
+- Fully translates report details and officer timelines between English, Hindi (हिन्दी), Kannada (ಕನ್ನಡ), and Tamil (தமிழ்).
+- Uses Gemini on the backend to translate contextually, rather than simple literal word-for-word translation.
+
+### 4. 📍 Geofenced Anti-Duplication
+- Before creating a new ticket, the platform evaluates coordinates. If an issue of the same category exists within a **60-meter radius**, the system prompts the user to verify/confirm the existing issue instead of creating a duplicate.
+
+### 5. 🗳️ Proximity-Weighted Verification
+- To bypass manual city inspector visits, local citizens can "verify" other reports.
+- **Rule**: Must be within **500 meters** of the issue coordinates (validated via GPS).
+- The upvote weight is scaled by the citizen's **Trust Score**. Reaching a weighted threshold (2.0) automatically shifts the issue status from "Reported" to "Verified".
+
+### 6. 🎖️ Civic Gamification
+- Citizens earn XP, unlock badges (*Local Watchdog*, *Daily Guardian*), and maintain active daily login streaks to incentivize community support.
+
+### 7. 🏢 Admin Console & Predictive AI Insights
+- **SLA Breach Warnings**: Tracks SLA deadlines and highlights overdue tasks.
+- **AI Operational Forecast**: Computes local Hotspot zones, top recurring issues, and forecasts tickets at risk of SLA breaching.
+- **AI Assignment Recommender**: Recommends the best Field Officer to handle a ticket based on geographical proximity and current task load.
+
+### 8. 🛵 Officer GPS Check-In
+- Field officers must be within **200 meters** of the assigned issue coordinates to check in. This logs their physical arrival in the issue timeline and allows them to update/resolve the ticket.
+
+### 9. ⚡ Offline local storage & Sync
+- Built as a Progressive Web App (PWA). If internet is lost, it saves all reports to `localStorage` and syncs them to Firestore automatically once connection is restored.
 
 ---
 
@@ -112,12 +119,13 @@ graph TD
 
 | Layer | Technology Used | Purpose |
 |---|---|---|
-| **Frontend** | Vanilla JS + Leaflet Maps + ChartJS | Compact, interactive, responsive map-centric dashboard. |
-| **Backend** | Node.js (ESM) + Express.js | Core API engine hosting REST endpoints. |
-| **AI Integration** | `@google/genai` (Gemini 2.5 Flash) | Image classification, translation, trend analysis, and memos. |
-| **Edge Fallback** | MobileNet v2 (TensorFlow.js) | Local, on-device image classification when offline/no API key. |
-| **Database** | Firebase Firestore | Real-time multi-device database synchronization. |
-| **Deployment** | Google Cloud Run / App Engine | Scalable serverless cloud environments. |
+| **Frontend UI** | HTML5 + CSS3 (Glassmorphism theme) + Vanilla ES6 JS | Lightweight, interactive viewport styling. |
+| **Interactive Mapping** | Leaflet.js (Voyager Tiles API) | Visual coordinate map pins and geofence tracking. |
+| **Analytics Charts** | Chart.js | Renders dynamic line and pie graphs on the Admin console. |
+| **API Backend** | Node.js + Express.js | Exposes backend API endpoints. |
+| **AI Processing** | `@google/genai` (Gemini 2.5 Flash) | Image triage, translation, officer suggestions, and escalation. |
+| **Database Sync** | Firebase Firestore + LocalStorage fallback | Bi-directional real-time data synchronization. |
+| **Deployment** | Google Cloud Run + Cloud Build | Managed serverless hosting with automated CI/CD. |
 
 ---
 
@@ -125,11 +133,8 @@ graph TD
 
 ### 1. Clone & Install
 ```bash
-# Clone the repository
-git clone https://github.com/krishna-vishwakarma/community-hero.git
+git clone https://github.com/Krishna-v03/community-hero.git
 cd community-hero
-
-# Install dependencies
 npm install
 ```
 
@@ -139,72 +144,33 @@ Create a `.env` file in the root directory:
 PORT=3000
 
 # Get your Gemini API Key from Google AI Studio: https://aistudio.google.com/apikey
-GEMINI_API_KEY=your_google_ai_studio_api_key
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 ### 3. Run Locally
 ```bash
-# Start server
 npm start
 ```
-Open your browser and navigate to `http://localhost:3000`.
-
-*Relative links to main deployment files:*
-* [Dockerfile](./Dockerfile) — Containerized deployment specifications.
-* [app.yaml](./app.yaml) — App Engine configuration parameters.
-* [firebase-config.js](./firebase-config.js) — Firebase connection config.
+Navigate to `http://localhost:3000` in your web browser.
 
 ---
 
 ## ☁️ Google Cloud Deployment Guide
 
-We have pre-configured [Dockerfile](./Dockerfile) and [app.yaml](./app.yaml) configurations to deploy to Google Cloud.
+We utilize a **Dockerfile** based build deployed on **Google Cloud Run** for serverless hosting.
 
-### Option A: Google Cloud Run (Recommended Containerized)
-Google Cloud Run runs your application containerized. You can build the container image either locally (using Docker) or directly in the cloud (using Google Cloud Build, which does not require Docker installed on your machine).
+### Continuous Deployment via GitHub (Automated CI/CD)
+The project is set up with automated CI/CD:
+1. Every commit pushed to the `main` branch of your GitHub repository triggers a **Google Cloud Build** webhook.
+2. Cloud Build builds the container image using [Dockerfile](./Dockerfile) and registers it in **Artifact Registry**.
+3. It performs a zero-downtime rolling update to your **Cloud Run** service.
 
-#### Method 1: Cloud-Based Containerization (No local Docker required)
-1. Open [Google Cloud Shell](https://shell.cloud.google.com).
-2. Clone your repository:
-   ```bash
-   git clone https://github.com/krishna-vishwakarma/community-hero.git && cd community-hero
-   ```
-3. Submit the build to **Google Cloud Build** and deploy it to **Cloud Run** in a single step (Google Cloud will build the Docker image using the provided [Dockerfile](./Dockerfile) in the cloud):
-   ```bash
-   gcloud run deploy community-hero \
-     --source . \
-     --allow-unauthenticated \
-     --set-env-vars="GEMINI_API_KEY=your_google_ai_studio_api_key"
-   ```
-
-#### Method 2: Local Containerization (Requires local Docker installation)
-If you have Docker installed on your local development machine, you can build and run the image locally:
-1. Build the Docker image containing both the Express backend and static frontend assets:
-   ```bash
-   docker build -t community-hero .
-   ```
-2. Run the container locally:
-   ```bash
-   docker run -p 3000:3000 --env GEMINI_API_KEY="your_google_ai_studio_api_key" community-hero
-   ```
-3. Push to Google Artifact Registry to deploy:
-   ```bash
-   docker tag community-hero gcr.io/your_gcp_project_id/community-hero
-   docker push gcr.io/your_gcp_project_id/community-hero
-   ```
-
-
-### Option B: Google App Engine (Standard)
-Deploy directly using:
-```bash
-gcloud app deploy
-```
-Make sure to configure the `GEMINI_API_KEY` under the app settings in the GCP Console.
+*Note: Environment variables like `GEMINI_API_KEY` are securely injected into the Cloud Run service variables dashboard in the Google Cloud Console, preventing them from being exposed in public code files.*
 
 ---
 
 ## 🧪 Running Smoke Tests
-A comprehensive test suite is included to validate the server routes and GenAI payloads.
+Run the Express endpoint integration tests using:
 ```bash
 npm test
 ```
@@ -213,64 +179,28 @@ npm test
 
 ## 👥 Demo Accounts & Roles
 
-> [!WARNING]
-> **Security Disclaimer:** The following credentials are mock developer profiles pre-seeded with static mock database profiles. They are intended strictly for hackathon evaluation and local reviews. No real, sensitive, or personal data is collected or stored.
+To test the workflows, click on the **Quick-Fill chips** at the bottom of the login screen:
 
-To test the multi-role collaboration workflow, use the following credentials:
-
-| Role | Email | Password | Description |
+| Role | Email | Password | Features to Test |
 |---|---|---|---|
-| **Citizen** | `krishna@civic.com` | `citizen123` | Report issues with images, vote on nearby issues, track XP. |
-| **Field Officer** | `ramesh@civic.com` | `officer123` | Check-in via GPS at assigned sites, upload proof, resolve. |
-| **Admin** | `sarah@civic.com` | `admin123` | Manage live map queue, get AI trend reports, view SLA breach logs. |
-
----
-
-## 🎬 3-Minute Hackathon Demo Script
-
-Follow these steps for a perfect end-to-end live demo:
-
-1. **Citizen View (Triage & Gamification)**
-   * Log in as `krishna@civic.com`.
-   * Click **Report Issue** and upload a photo (e.g. pothole).
-   * Observe **Gemini Vision AI** instantly classify the issue, assign severity, write a description, and output its visual reasoning.
-2. **Community Verification**
-   * View the map. Click on nearby issues.
-   * If you are within `500m`, the **Verify** button becomes active. Confirm the issue to increase its trust-weight.
-3. **Admin Dashboard (Analytics & suggestions)**
-   * Log in as `sarah@civic.com`.
-   * Open the admin dashboard to see live SLA timelines and ward analytics.
-   * Click **AI City Ops Forecast** to fetch real-time recommendations generated by Gemini.
-   * Open the ticket and click **AI Officer Suggestion** to find the most suitable field worker based on distance and load. Assign it.
-4. **Field Officer (Resolution)**
-   * Log in as `ramesh@civic.com`.
-   * Check **My Assignments**, click on the task, check in at the coordinate, upload a "resolved" picture, and close it.
-5. **Transparency & Public Share**
-   * Copy the public share link. Open the link in an incognito window (`?issue=ID&public=1`). The public can view the resolution timeline without logging in.
+| **Citizen** | `krishna@civic.com` | `citizen123` | Report with photo/voice, translate cards to Hindi, verify nearby issues. |
+| **Field Officer** | `ramesh@civic.com` | `officer123` | Check-in at issue coordinates via GPS, view assigned work orders. |
+| **Admin** | `sarah@civic.com` | `admin123` | View SLA analytics, get AI predictions, assign tasks, export PDF/CSV queues. |
 
 ---
 
 ## 🤖 Gemini API Endpoints Configuration
 
+Exposed backend routes communicating with the `gemini-2.5-flash` model:
+
 | Endpoint | Method | Input Parameters | Output Payload | Description |
 |---|---|---|---|---|
-| `/api/classify` | `POST` | `{ imageBase64 }` | `{ category, confidence, priority, reasoning }` | Parses image data to categorize infrastructure issues. |
-| `/api/suggest-assignment` | `POST` | `{ issue, officers, officerLoads }` | `{ officerId, reason, confidence }` | Finds the best match officer. |
-| `/api/escalate` | `POST` | `{ issue, overdueHours }` | `{ memo, issueId }` | Auto-generates administrative SLA reports. |
-| `/api/trends` | `POST` | `{ issues, wards }` | `{ summary, forecast, recommendation }` | Generates city health insights. |
-| `/api/translate` | `POST` | `{ text, targetLang }` | `{ translated, targetLang }` | Multi-language translation. |
-
----
-
-## 🔮 Future Roadmap
-
-* **🚨 IoT Infrastructure Integration:** Connect smart streetlights to automatically trigger tickets when lamps flicker, bypassing manual reporting.
-* **🎙️ Voice-to-Report Accessibility:** Enable multi-lingual voice messages which are parsed via Gemini's Audio API into text reports for disabled or elderly users.
-* **📈 Autonomous Budget Allocation:** Let CivicAI aggregate ward issue patterns to suggest budget distributions to wards needing critical road repairs.
-* **📲 WhatsApp Chatbot Integration:** Citizens submit reports and images directly via WhatsApp Business API, making reporting accessible without installing PWAs.
+| `/api/classify` | `POST` | `{ imageBase64 }` | `{ category, isSpam, severity, reasoning, title, description }` | Uses Gemini Vision to triage images and filter out spam. |
+| `/api/suggest-assignment` | `POST` | `{ issue, officers, officerLoads }` | `{ officerId, confidence, reason }` | Computes the most suitable officer to assign. |
+| `/api/translate` | `POST` | `{ text, targetLang }` | `{ translated, targetLang }` | Language translation (Hindi/Tamil/Kannada/English). |
+| `/api/escalate` | `POST` | `{ issue, overdueHours }` | `{ memo }` | Generates escalation memos for overdue tickets. |
 
 ---
 
 ## 📄 License
-This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details. Built for the Google AI Studio & Google Cloud Hackathon.
-
+This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.
