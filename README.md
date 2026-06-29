@@ -47,6 +47,12 @@ In rapidly developing cities, public infrastructure faults (potholes, water leak
 
 ## 🎨 Visual Showcase
 
+### 🎬 Live Walkthrough Demo Video
+Watch a full end-to-end walkthrough of the platform including Citizen Reporting, AI Visual Triage, Admin Command Operations, and Field Officer check-ins:
+![Community Hero Walkthrough Demo](./assets/hackathon_demo.webp)
+
+---
+
 ### 📱 Citizen Map & Gamification
 The mobile-first PWA dashboard enables citizens to view active reports around them and track their civic contributions.
 ![Citizen Map Dashboard](./assets/citizen_map.png)
