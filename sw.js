@@ -1,4 +1,4 @@
-const CACHE = 'community-hero-v1';
+const CACHE = 'community-hero-v2';
 const ASSETS = ['/', '/index.html', '/styles.css', '/app.js', '/mockData.js', '/firebase.js', '/firebase-config.js'];
 
 self.addEventListener('install', (e) => {
