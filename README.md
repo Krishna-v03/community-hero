@@ -64,7 +64,14 @@ Admins can generate and print clean, professional PDF reports of the operational
 
 ---
 
+### 📝 Detailed Incident Report & Tracking
+Citizens and authorities can track individual reports in real-time, viewing GPS markers, status updates, and verification progress.
+![Detailed Incident Report](./assets/Screenshot%202026-06-29%20180806.png)
+
+---
+
 ## 🚀 Key Features Breakdown
+
 
 ### 1. 🧠 Multimodal AI Visual Triage (Gemini 2.5 Flash)
 - When a citizen uploads an image of a fault, the backend passes it to the Gemini vision model.
