@@ -76,16 +76,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Public read-only share — no login required (handled by enhancements.js)
   if (isPublicShare) return;
 
-  // 3. Check for an existing session
-  const savedSession = localStorage.getItem("civic_session");
-  if (savedSession) {
-    const sessionUser = JSON.parse(savedSession);
-    currentUser = users.find(u => u.id === sessionUser.id) || sessionUser;
-    bootApp();
-  } else {
-    document.getElementById("login-screen").style.display = "flex";
-    document.getElementById("app-container").style.display = "none";
-  }
+  // 3. Always show the login screen on startup (session persistence disabled per user request)
+  localStorage.removeItem("civic_session");
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("app-container").style.display = "none";
 });
 
 // Load all data — tries Firebase Firestore first, falls back to localStorage
